@@ -1,34 +1,78 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef struct node {
-    int data;           // 데이터
-    struct node* link;  // 다음 노드를 가리키는 포인터
-} Node;
+typedef struct Node{
+    int data;
+    struct Node*Nextnode;
+}Node;
 
-int main() {
-    int n;
-    printf("Enter the number of nodes: ");
-    scanf("%d", &n);
+int insertnode(Node*h, int key);
+int printnode(Node*h);
+void freenode(Node*h);
 
-    Node* head = NULL;  // 링크드 리스트의 헤드 포인터
+int main()
+{
+    int i,n;
+    printf("enter :");
+    scanf("%d",&n);
+    
+    Node*head=(Node*)malloc(sizeof(Node));
+    head->data=0;
+    head->Nextnode=NULL;
 
-    // 링크드 리스트 노드 생성
-    for (int i = n ; i >= 1; i--) {
-        Node* newNode = (Node*)malloc(sizeof(Node));  // 새로운 노드 생성
-        newNode->data = i;                            // 노드의 데이터는 인덱스 값으로 지정
-        newNode->link = head;                         // 새로운 노드의 link는 이전 노드를 가리킴
-        head = newNode;                               // 헤드 포인터는 새로운 노드를 가리킴
+    for(i = 1; i <= n; i++){
+        insertnode(head, i);
     }
 
-    // 링크드 리스트 출력
-    printf("List: ");
-    Node* current = head;
-    while (current != NULL) {
-        printf("%d ", current->data);
-        current = current->link;
-    }
-    printf("\n");
-
+    printnode(head);
+    freenode(head);
+    
     return 0;
+
+}
+
+int insertnode(Node*h, int key)
+{
+    Node*p=(Node*)malloc(sizeof(Node));
+    p->data=key;
+    p->Nextnode=NULL;
+
+    if(h->Nextnode==NULL){
+        h->Nextnode=p;
+        return 0;
+    }
+    
+    Node*n=h->Nextnode;
+    while(n->Nextnode!=NULL){
+        n=n->Nextnode;
+    }
+    n->Nextnode=p;
+    return 0;
+}
+
+int printnode(Node *h)
+{
+    Node*p;
+
+    p=h->Nextnode;
+    while(p!=NULL){
+        printf("%d ", p->data);
+    p = p->Nextnode;
+    }
+    return 0;
+
+}
+
+void freenode(Node*h)
+{
+    Node*f=h->Nextnode;;
+    Node*prev=NULL;
+    while(f!=NULL){
+        prev=f;
+        f=f->Nextnode;
+        free(prev);
+    }
+    free(f);
+
 }
